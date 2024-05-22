@@ -1,4 +1,4 @@
-package br.com.koruthos.cursoandroid
+package com.example.tradutorportunhol
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
