@@ -1,97 +1,62 @@
 package com.example.tradutorportunhol
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
-import com.example.tradutorportunhol.R
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import com.example.tradutorportunhol.databinding.ActivityMainBinding
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
-    private val TAG = "Main"
-
-    /**
-     * onCreate: Responsável pela construção da activity
-     *
-     * - Define o layout das telas
-     * - Amarração de evento
-     * - Recuperação de estado anterior da tela
-     * - Chamada para webservices (?)
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Define qual o layout a ser carregado nesta activity
-        setContentView(R.layout.activity_main)
+        val binding: ActivityMainBinding = DataBindingUtil.setContentView(
+            this, R.layout.activity_main)
 
-        // A classe R possui diversos ponteiros para os arquivos
-        // que estão no diretório de recursos (/res)
-        // - Todos os arquivos de recursos devem seguir o padrão de nomenclatura
-        //   de variáveis (snake_case: tudo minusculo separado por _)
-
-
-        // Log no Android
-        // - Classe Log permite a impressão de logs
-        // - v: verboso
-        // - d: debug
-        // - i: informação
-        // - w: warning (alerta)
-        // - e: erro (fatal)
-        // - wtf: não sei o que houve!
-        Log.d(TAG, "onCreate: ")
-
-        Log.v(TAG, "VERBOSO")
-        Log.d(TAG, "DEBUG")
-        Log.i(TAG, "INFO")
-        Log.w(TAG, "WARNING")
-        Log.e(TAG, "ERROR")
-        Log.wtf(TAG, "WTF")
-
-        Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show()
+        binding.textInputLayout.setEndIconOnClickListener {
+            val texto = binding.editTextInput.text.toString()
+            val textoTraduzido = traduzirPortunhol(texto)
+            binding.textViewOutput.text = textoTraduzido
+        }
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart: ")
-        Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show()
+    fun traduzirPortunhol(mensagem: String): String {
 
+        // Converte a mensagem para minúsculo
+        var texto = mensagem.toLowerCase(Locale.ROOT)
+
+        // Substitui o texto para portunhol
+        texto = texto.replace("\\bo\\b".toRegex(), "lo")
+        texto = texto.replace("\\ba\\b".toRegex(), "la")
+        texto = texto.replace("\\be\\b".toRegex(), "y")
+        texto = texto.replace("\\b(é|eh)\\b".toRegex(), "es")
+        texto = texto.replace("\\bnós\\b ".toRegex(), "nosotros")
+        texto = texto.replace("\\b(tu|vc|você)\\b".toRegex(), "usted")
+        texto = texto.replace("\\b(vcs|vocês)\\b".toRegex(), "ustedes")
+        texto = texto.replace("\\bj\\b".toRegex(), "shôta")
+        texto = texto.replace("\\bJ\\b".toRegex(), "Shôta")
+        texto = texto.replace("v".toRegex(), "b")
+        texto = texto.replace("ão\\b".toRegex(), "ión")
+        texto = texto.replace("ões\\b".toRegex(), "iónes")
+        texto = texto.replace("inha\\b".toRegex(), "ita")
+        texto = texto.replace("inho\\b".toRegex(), "ito")
+        texto = texto.replace("dade\\b".toRegex(), "dad")
+        texto = texto.replace("nh".toRegex(), "ñ")
+        texto = texto.replace("\\beu\\b".toRegex(), "jo")
+        texto = texto.replace("\\bmas\\b".toRegex(), "pero")
+        texto = texto.replace("\\bdo\\b".toRegex(), "del")
+        texto = texto.replace("\\bem\\b".toRegex(), "en")
+        texto = texto.replace("\\bum\\b".toRegex(), "uno")
+        texto = texto.replace("\\buma\\b".toRegex(), "una")
+        texto = texto.replace("\\b(meu|minha)\\b".toRegex(), "mi")
+        texto = texto.replace("\\bbom\\b".toRegex(), "bueno")
+        texto = texto.replace("\\bboa\\b".toRegex(), "buena")
+        texto = texto.replace("\\bcara\\b".toRegex(), "cabrón")
+        texto = texto.replace("\\bhoje\\b".toRegex(), "hoy")
+        texto = texto.replace("\\b(\\w)(o)(\\w{2,6})\\b".toRegex(), "$1ue$3")
+        texto = texto.replace("\\b(\\w)(e)(\\w{2,6})\\b".toRegex(), "$1ie$3")
+
+        return texto
     }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume: ")
-        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show()
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause: ")
-        Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show()
-
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop: ")
-        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show()
-
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        Log.d(TAG, "onRestart: ")
-        Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show()
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy: ")
-        Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show()
-
-
-    }
-
-
 }
